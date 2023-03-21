@@ -1,0 +1,19 @@
+spring:
+
+#  security:
+#    user:
+#      name: admin
+#      password: 1234
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/hotel
+    username: root
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+
+   
