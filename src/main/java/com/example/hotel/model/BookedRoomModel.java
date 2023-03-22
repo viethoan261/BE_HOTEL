@@ -1,16 +1,14 @@
 package com.example.hotel.model;
 
+import com.example.hotel.utils.enumm.RoomBookedStatus;
+import com.example.hotel.utils.enumm.RoomStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -51,4 +49,8 @@ public class BookedRoomModel {
     @Column(name = "booking_id")
     @Type(type = "uuid-char")
     private UUID bookingId;
+
+    @Column(name = "status", length = 100)
+    @Enumerated(EnumType.STRING)
+    private RoomBookedStatus status;
 }

@@ -1,6 +1,7 @@
 package com.example.hotel.service;
 
 import com.example.hotel.dto.CreateRoomDTO;
+import com.example.hotel.dto.RequestBookRoomDTO;
 import com.example.hotel.dto.SearchRoomDTO;
 import com.example.hotel.dto.TestDTO;
 import com.example.hotel.model.RoomModel;
@@ -16,4 +17,6 @@ public interface RoomService {
     TestDTO test(UUID id, TestDTO dto);
 
     List<RoomModel> search(SearchRoomDTO dto);
+
+    RequestBookRoomDTO orderRoom(RequestBookRoomDTO dto);
 }

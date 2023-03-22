@@ -31,5 +31,5 @@ public class CreateRoomDTO {
 
     private String description;
 
-    private String avatar;
+    private String image;
 }

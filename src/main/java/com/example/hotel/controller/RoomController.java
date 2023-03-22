@@ -2,6 +2,7 @@ package com.example.hotel.controller;
 
 import com.example.hotel.common.util.ResponseHelper;
 import com.example.hotel.dto.CreateRoomDTO;
+import com.example.hotel.dto.RequestBookRoomDTO;
 import com.example.hotel.dto.SearchRoomDTO;
 import com.example.hotel.dto.TestDTO;
 import com.example.hotel.model.RoomModel;
@@ -60,5 +61,21 @@ public class RoomController {
     @PostMapping("search")
     public Object search(@RequestBody SearchRoomDTO dto) {
         return ResponseHelper.getResponse(roomService.search(dto), HttpStatus.OK);
+    }
+
+    @PostMapping("order")
+    public Object order(@Valid @RequestBody RequestBookRoomDTO dto, BindingResult result) {
+
+        if(result.hasErrors()) {
+            return ResponseHelper.getErrorResponse(result, HttpStatus.BAD_REQUEST);
+        }
+
+        RequestBookRoomDTO dtoRoom = roomService.orderRoom(dto);
+
+        if (dtoRoom == null) {
+            return ResponseHelper.getErrorResponse("Can not order room", HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseHelper.getResponse(dtoRoom, HttpStatus.OK);
     }
 }

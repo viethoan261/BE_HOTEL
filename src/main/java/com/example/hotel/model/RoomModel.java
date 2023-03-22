@@ -1,6 +1,7 @@
 package com.example.hotel.model;
 
 import com.example.hotel.common.model.BaseEntity;
+import com.example.hotel.utils.enumm.RoomStatus;
 import com.example.hotel.utils.enumm.RoomType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,4 +42,8 @@ public class RoomModel {
 
     @Column(name = "image")
     private String image;
+
+    @Column(name = "status", length = 100)
+    @Enumerated(EnumType.STRING)
+    private RoomStatus status;
 }
