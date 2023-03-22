@@ -33,7 +33,7 @@ public class RoomBookedServiceImpl implements RoomBookedService {
     public RequestBookRoomDTO create(RequestBookRoomDTO dto) {
         List<String> ids = dto.getIdsRoom();
         if (this.checkAvailableRoom(ids, dto)) {
-            List<RoomModel> rooms = roomRepository.findRoomByIds(ids);
+//            List<RoomModel> rooms = roomRepository.findRoomByIds(ids);
             ClientModel clientModel = new ClientModel();
 
             //save client
@@ -45,23 +45,25 @@ public class RoomBookedServiceImpl implements RoomBookedService {
             clientModel.setIsConfirmed(Boolean.FALSE);
             clientRepository.save(clientModel);
 
-            for(int i = 0; i < ids.size(); i++) {
-                //change status room
-                RoomModel room = rooms.get(i);
-                room.setIsBooked(Boolean.TRUE);
-                roomRepository.save(room);
-
-                //save bookedRoom
-                BookedRoomModel bookedRoom = new BookedRoomModel();
-                bookedRoom.setRoomID(room.getId());
-                bookedRoom.setNote(dto.getNote());
-                bookedRoom.setPrice(room.getPrice());
-                bookedRoom.set
-            }
+//            for(int i = 0; i < ids.size(); i++) {
+//                //change status room
+//                RoomModel room = rooms.get(i);
+//                room.setIsBooked(Boolean.TRUE);
+//                roomRepository.save(room);
+//
+//                //save bookedRoom
+//                BookedRoomModel bookedRoom = new BookedRoomModel();
+//                bookedRoom.setRoomID(room.getId());
+//                bookedRoom.setNote(dto.getNote());
+//                bookedRoom.setPrice(room.getPrice());
+////                bookedRoom.set
+//            }
 
         } else {
             return null;
         }
+        return null;
+
     }
 
     private Boolean checkAvailableRoom(List<String> ids, RequestBookRoomDTO dto) {

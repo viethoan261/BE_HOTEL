@@ -15,5 +15,5 @@ public interface RoomRepository extends JpaRepository<RoomModel, UUID> {
     Optional<RoomModel> findRoomByName(String name);
 
     @Query("select r FROM RoomModel r where r.id IN :ids")
-    List<RoomModel> findRoomByIds(List<String> ids);
+    List<RoomModel> findRoomByIds(List<UUID> ids);
 }
