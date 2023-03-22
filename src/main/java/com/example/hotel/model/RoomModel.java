@@ -6,8 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -15,8 +17,13 @@ import javax.persistence.*;
 @SuperBuilder
 @Entity
 @Table(name = "room")
-public class RoomModel extends BaseEntity {
-    @Column(name = "name", unique = true, nullable = false, length = 100)
+public class RoomModel {
+    @Id
+    @Type(type = "uuid-char")
+    @GeneratedValue
+    protected UUID id;
+
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @Column(name = "type", nullable = false, length = 100)
@@ -29,6 +36,9 @@ public class RoomModel extends BaseEntity {
     @Column(name = "description", length = 100)
     private String description;
 
-    @Column(name = "is_check_in", nullable = false)
-    private Boolean isCheckedIn;
+    @Column(name = "is_booked")
+    private Boolean isBooked;
+
+    @Column(name = "image")
+    private String image;
 }

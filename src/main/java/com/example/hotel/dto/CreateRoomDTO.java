@@ -1,6 +1,7 @@
 package com.example.hotel.dto;
 
 import com.example.hotel.utils.enumm.RoomType;
+import com.example.hotel.validation.annotation.UniqueRoomName;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,14 +19,17 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Builder
 public class CreateRoomDTO {
-    @NotBlank
+    @NotBlank(message = "Room name can not be blank")
+    @UniqueRoomName
     private String name;
 
-    @NotNull
+    @NotNull(message = "Room type can not be null")
     private RoomType type;
 
-    @Min(0)
+    @Min(value = 0, message = "Min price must be 0")
     private Float price;
 
     private String description;
+
+    private String avatar;
 }

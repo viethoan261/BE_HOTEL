@@ -1,6 +1,5 @@
 package com.example.hotel.model;
 
-import com.example.hotel.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +8,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,9 +20,15 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @Table(name = "booked_room")
-public class BookedRoomModel extends BaseEntity {
+public class BookedRoomModel {
+    @Id
+    @Type(type = "uuid-char")
+    @GeneratedValue
+    protected UUID id;
+
     @Column(name = "room_id", nullable = false)
-    private String roomID;
+    @Type(type = "uuid-char")
+    private UUID roomID;
 
     @Column(name = "check_in", nullable = false)
     private LocalDateTime checkIn;
@@ -35,9 +42,13 @@ public class BookedRoomModel extends BaseEntity {
     @Column(name = "note")
     private String note;
 
-    @Column(name = "amount", nullable = false)
-    private Float amount;
+    @Column(name = "selloff", nullable = false)
+    private Float selloff;
 
-    @Column(name = "service_id")
-    private String serviceId;
+    @Column(name = "is_check_in")
+    private Boolean isCheckIn;
+
+    @Column(name = "booking_id")
+    @Type(type = "uuid-char")
+    private UUID bookingId;
 }
