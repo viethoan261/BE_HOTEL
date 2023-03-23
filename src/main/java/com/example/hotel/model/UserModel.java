@@ -1,7 +1,9 @@
 package com.example.hotel.model;
 
+import com.example.hotel.common.model.BaseEntity;
 import com.example.hotel.utils.enumm.RoleUser;
 import com.example.hotel.utils.enumm.RoomType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,12 +19,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @Table(name = "user")
-public class UserModel {
-    @Id
-    @Type(type = "uuid-char")
-    @GeneratedValue
-    protected UUID id;
-
+public class UserModel extends BaseEntity {
     @Column(name = "username", unique = true, nullable = false, length = 100)
     private String userName;
 
@@ -31,7 +28,8 @@ public class UserModel {
     private RoleUser position;
 
     @Column(name = "password", nullable = false, length = 100)
-    private String price;
+    @JsonIgnore
+    private String password;
 
     @Column(name = "full_name", length = 100)
     private String fullName;

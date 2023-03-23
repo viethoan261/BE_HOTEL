@@ -1,5 +1,6 @@
 package com.example.hotel.model;
 
+import com.example.hotel.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,12 +17,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @Table(name = "booking")
-public class BookingModel {
-    @Id
-    @Type(type = "uuid-char")
-    @GeneratedValue
-    protected UUID id;
-
+public class BookingModel extends BaseEntity {
     @Column(name = "booking_date")
     private LocalDateTime bookingDate;
 

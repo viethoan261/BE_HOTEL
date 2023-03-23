@@ -18,12 +18,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @Table(name = "room")
-public class RoomModel {
-    @Id
-    @Type(type = "uuid-char")
-    @GeneratedValue
-    protected UUID id;
-
+public class RoomModel extends BaseEntity{
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
