@@ -1,20 +1,15 @@
 package com.example.hotel.controller;
 
 import com.example.hotel.common.util.ResponseHelper;
-import com.example.hotel.dto.CreateRoomDTO;
 import com.example.hotel.dto.RequestBookRoomDTO;
 import com.example.hotel.dto.SearchRoomDTO;
-import com.example.hotel.dto.TestDTO;
-import com.example.hotel.model.RoomModel;
 import com.example.hotel.service.ClientService;
-import com.example.hotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v2")

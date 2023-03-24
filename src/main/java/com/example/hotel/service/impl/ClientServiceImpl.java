@@ -40,9 +40,6 @@ public class ClientServiceImpl implements ClientService {
     private ClientRepository clientRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private BookingRepository bookingRepository;
 
     @Override
@@ -138,21 +135,5 @@ public class ClientServiceImpl implements ClientService {
         } else {
             return null;
         }
-    }
-
-    private String getIdUserCurrent() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null) {
-            return null;
-        }
-
-        if (auth.getPrincipal() instanceof String) {
-            return (String) auth.getPrincipal();
-        }
-
-        UserDetails currentAuditor = (UserDetails) auth.getPrincipal();
-        String username =  currentAuditor.getUsername();
-        return userRepository.findByUserName(username).get().getId().toString();
     }
 }

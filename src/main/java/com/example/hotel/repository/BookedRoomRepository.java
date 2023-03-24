@@ -14,4 +14,7 @@ public interface BookedRoomRepository extends JpaRepository<BookedRoomModel, UUI
 
     @Query("select br from BookedRoomModel br where br.checkIn > :end or br.checkOut < :start")
     List<BookedRoomModel> bookedRoomExpire(LocalDateTime start, LocalDateTime end);
+
+    @Query("select br from BookedRoomModel br where br.bookingId = :bookingId")
+    List<BookedRoomModel> findByBookingId(UUID bookingId);
 }
