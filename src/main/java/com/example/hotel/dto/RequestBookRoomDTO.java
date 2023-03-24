@@ -29,6 +29,12 @@ public class RequestBookRoomDTO {
     @NotBlank(message = "Full name can not be blank")
     private String fullName;
 
+    @NotBlank(message = "Bank name can not be blank")
+    private String bankName;
+
+    @NotBlank(message = "Bank number can not be blank")
+    private String bankNumber;
+
     @NotNull(message = "Ids room can not be null")
     private List<String> idsRoom;
 

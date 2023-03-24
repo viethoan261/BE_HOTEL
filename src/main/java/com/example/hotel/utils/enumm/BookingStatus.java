@@ -2,5 +2,8 @@ package com.example.hotel.utils.enumm;
 
 public enum BookingStatus {
     PENDING,
-    ROLE_MANAGER
+    ACCEPT,
+    PROGRESS,
+    DONE,
+    CANCEL
 }

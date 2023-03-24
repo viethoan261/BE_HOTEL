@@ -1,6 +1,7 @@
 package com.example.hotel.model;
 
 import com.example.hotel.common.model.BaseEntity;
+import com.example.hotel.utils.enumm.BookingStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,10 @@ public class BookingModel extends BaseEntity {
 
     @Column(name = "note")
     private String note;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
 
     @Column(name = "user_id")
     @Type(type = "uuid-char")

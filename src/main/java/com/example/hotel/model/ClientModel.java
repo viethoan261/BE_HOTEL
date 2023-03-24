@@ -40,6 +40,12 @@ public class ClientModel {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "bank_name")
+    private String bankName;
+
+    @Column(name = "bank_number")
+    private String bankNumber;
+
     @Column(name = "note")
     private String note;
 

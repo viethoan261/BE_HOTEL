@@ -15,8 +15,4 @@ public interface RoomService {
     RoomModel update(UUID id, CreateRoomDTO dto);
 
     TestDTO test(UUID id, TestDTO dto);
-
-    List<RoomModel> search(SearchRoomDTO dto);
-
-    RequestBookRoomDTO orderRoom(RequestBookRoomDTO dto);
 }
