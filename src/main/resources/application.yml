@@ -5,10 +5,15 @@ spring:
 #      name: admin
 #      password: 1234
 
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/hotel
+#    username: root
+#    password: viethoan2k1
+
   datasource:
-    url: jdbc:mysql://localhost:3306/hotel
+    url: mysql://root:DDqiHRSHz1BsfH799soZ@containers-us-west-48.railway.app:5728/railway
     username: root
-    password:
+    password: DDqiHRSHz1BsfH799soZDDqiHRSHz1BsfH799soZ
 
   jpa:
     hibernate:
