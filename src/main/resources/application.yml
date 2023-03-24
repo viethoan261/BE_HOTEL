@@ -11,7 +11,7 @@ spring:
 #    password: viethoan2k1
 
   datasource:
-    url: mysql://root:DDqiHRSHz1BsfH799soZ@containers-us-west-48.railway.app:5728/railway
+    url: jdbc:mysql://containers-us-west-48.railway.app:5728/railway
     username: root
     password: DDqiHRSHz1BsfH799soZDDqiHRSHz1BsfH799soZ
 
