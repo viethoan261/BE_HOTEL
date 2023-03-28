@@ -11,9 +11,9 @@ import java.util.UUID;
 
 @Repository
 public interface RoomRepository extends JpaRepository<RoomModel, UUID> {
-    @Query("select r FROM RoomModel r where r.name = :name")
+    @Query("select r FROM RoomModel r where r.name = :name and r.status <> 'DRAFT'")
     Optional<RoomModel> findRoomByName(String name);
 
-    @Query("select r FROM RoomModel r where r.id IN :ids")
+    @Query("select r FROM RoomModel r where r.id IN :ids and r.status <> 'DRAFT'")
     List<RoomModel> findRoomByIds(List<UUID> ids);
 }

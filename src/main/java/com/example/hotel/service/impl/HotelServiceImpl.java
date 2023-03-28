@@ -196,19 +196,20 @@ public class HotelServiceImpl implements HotelService {
             ClientModel client = clientRepository.findById(booking.getClientID()).get();
             List<BookedRoomModel> rooms = bookedRoomRepository.findByBookingId(booking.getId());
             for (BookedRoomModel model: rooms) {
-                RoomModel room = roomRepository.getById(model.getRoomID());
-                InfoBookingDTO infoDTO = new InfoBookingDTO();
+                RoomModel room = roomRepository.findById(model.getRoomID()).orElse(null);
                 if (room != null) {
+                    InfoBookingDTO infoDTO = new InfoBookingDTO();
                     infoDTO.setName(room.getName());
                     infoDTO.setType(room.getType());
                     infoDTO.setImage(room.getImage());
+                    infoDTO.setStatus(booking.getStatus());
+                    infoDTO.setNote(booking.getNote());
+                    infoDTO.setCheckin(model.getCheckIn());
+                    infoDTO.setCheckout(model.getCheckOut());
+                    infos.add(infoDTO);
                 }
-                infoDTO.setStatus(booking.getStatus());
-                infoDTO.setNote(booking.getNote());
-                infoDTO.setCheckin(model.getCheckIn());
-                infoDTO.setCheckout(model.getCheckOut());
-                infos.add(infoDTO);
             }
+            dto.setId(booking.getId());
             dto.setClient(client);
             dto.setRooms(infos);
             dtos.add(dto);
