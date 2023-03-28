@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1")
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin(origins = {"http://localhost:5173/", "http://localhost:5174/"})
 public class HotelController {
     @Autowired
     private HotelService hotelService;
