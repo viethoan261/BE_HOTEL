@@ -70,4 +70,9 @@ public class HotelController {
         hotelService.checkin(UUID.fromString(id));
         return ResponseHelper.getResponse("checkin thanh cong", HttpStatus.OK);
     }
+
+    @GetMapping("/rooms/bookings")
+    public Object getBooking() {
+        return ResponseHelper.getResponse(hotelService.getBooking(), HttpStatus.OK);
+    }
 }

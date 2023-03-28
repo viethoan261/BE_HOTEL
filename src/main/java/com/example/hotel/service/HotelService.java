@@ -1,9 +1,11 @@
 package com.example.hotel.service;
 
+import com.example.hotel.dto.BookingListDTO;
 import com.example.hotel.dto.CreateRoomDTO;
 import com.example.hotel.dto.TestDTO;
 import com.example.hotel.model.RoomModel;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface HotelService {
@@ -18,4 +20,6 @@ public interface HotelService {
     void cancel(UUID bookingID);
 
     void checkin(UUID bookingID);
+
+    List<BookingListDTO> getBooking();
 }

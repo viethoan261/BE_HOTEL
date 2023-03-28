@@ -1,13 +1,17 @@
 package com.example.hotel.service.impl;
 
+import com.example.hotel.dto.BookingListDTO;
 import com.example.hotel.dto.CreateRoomDTO;
+import com.example.hotel.dto.InfoBookingDTO;
 import com.example.hotel.dto.TestDTO;
 import com.example.hotel.mapper.RoomMapper;
 import com.example.hotel.model.BookedRoomModel;
 import com.example.hotel.model.BookingModel;
+import com.example.hotel.model.ClientModel;
 import com.example.hotel.model.RoomModel;
 import com.example.hotel.repository.BookedRoomRepository;
 import com.example.hotel.repository.BookingRepository;
+import com.example.hotel.repository.ClientRepository;
 import com.example.hotel.repository.RoomRepository;
 import com.example.hotel.repository.UserRepository;
 import com.example.hotel.service.HotelService;
@@ -37,6 +41,9 @@ public class HotelServiceImpl implements HotelService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Override
     public CreateRoomDTO create(CreateRoomDTO dto) {
@@ -105,6 +112,11 @@ public class HotelServiceImpl implements HotelService {
             bookedRoom.setSelloff(selloff);
         }
         bookedRoomRepository.saveAll(bookedRoomModels);
+
+        //update client
+        ClientModel client = clientRepository.findById(booking.getClientID()).get();
+        client.setIsConfirmed(Boolean.TRUE);
+        clientRepository.save(client);
     }
 
     @Transactional
@@ -172,6 +184,35 @@ public class HotelServiceImpl implements HotelService {
             room.setStatus(RoomStatus.PROGRESS);
         }
         roomRepository.saveAll(rooms);
+    }
+
+    @Override
+    public List<BookingListDTO> getBooking() {
+        List<BookingListDTO> dtos = new ArrayList<>();
+        List<BookingModel> bookingModels = bookingRepository.getBookings();
+        for (BookingModel booking: bookingModels) {
+            List<InfoBookingDTO> infos = new ArrayList<>();
+            BookingListDTO dto = new BookingListDTO();
+            ClientModel client = clientRepository.findById(booking.getClientID()).get();
+            List<BookedRoomModel> rooms = bookedRoomRepository.findByBookingId(booking.getId());
+            for (BookedRoomModel model: rooms) {
+                RoomModel room = roomRepository.getById(model.getRoomID());
+                InfoBookingDTO infoDTO = new InfoBookingDTO();
+                infoDTO.setStatus(booking.getStatus());
+                infoDTO.setName(room.getName());
+                infoDTO.setNote(booking.getNote());
+                infoDTO.setType(room.getType());
+                infoDTO.setCheckin(model.getCheckIn());
+                infoDTO.setCheckout(model.getCheckOut());
+                infoDTO.setImage(room.getImage());
+                infos.add(infoDTO);
+            }
+            dto.setClient(client);
+            dto.setRooms(infos);
+            dtos.add(dto);
+        }
+
+        return dtos;
     }
 
     private String getIdUserCurrent() {
