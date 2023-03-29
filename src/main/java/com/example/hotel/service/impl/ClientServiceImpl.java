@@ -133,7 +133,7 @@ public class ClientServiceImpl implements ClientService {
         if (count == size) {
             return true;
         } else {
-            return null;
+            return false;
         }
     }
 }

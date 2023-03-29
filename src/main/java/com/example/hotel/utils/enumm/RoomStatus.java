@@ -4,5 +4,5 @@ public enum RoomStatus {
     FREE,
     PENDING,
     PROGRESS,
-    DRAFT
+    BLOCK
 }
