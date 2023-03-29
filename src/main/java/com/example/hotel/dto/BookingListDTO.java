@@ -2,6 +2,7 @@ package com.example.hotel.dto;
 
 import com.example.hotel.model.ClientModel;
 import com.example.hotel.model.RoomModel;
+import com.example.hotel.utils.enumm.BookingStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class BookingListDTO {
     private UUID id;
+    private BookingStatus status;
     private ClientModel client;
     private List<InfoBookingDTO> rooms;
 }

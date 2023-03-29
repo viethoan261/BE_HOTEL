@@ -14,7 +14,6 @@ public class InfoBookingDTO {
     private LocalDateTime checkin;
     private LocalDateTime checkout;
     private String note;
-    private BookingStatus status;
     private RoomType type;
     private String image;
 }
