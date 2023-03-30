@@ -34,7 +34,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Book;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -223,7 +223,6 @@ public class HotelServiceImpl implements HotelService {
                     infoDTO.setName(room.getName());
                     infoDTO.setType(room.getType());
                     infoDTO.setImage(room.getImage());
-                    infoDTO.setStatus(booking.getStatus());
                     infoDTO.setNote(booking.getNote());
                     infoDTO.setCheckin(model.getCheckIn());
                     infoDTO.setCheckout(model.getCheckOut());
@@ -233,6 +232,7 @@ public class HotelServiceImpl implements HotelService {
             dto.setId(booking.getId());
             dto.setClient(client);
             dto.setRooms(infos);
+            dto.setStatus(booking.getStatus());
             dtos.add(dto);
         }
 
