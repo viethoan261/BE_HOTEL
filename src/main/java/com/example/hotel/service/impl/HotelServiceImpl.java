@@ -3,21 +3,30 @@ package com.example.hotel.service.impl;
 import com.example.hotel.dto.BookingListDTO;
 import com.example.hotel.dto.CreateRoomDTO;
 import com.example.hotel.dto.InfoBookingDTO;
+import com.example.hotel.dto.ServiceCreateDTO;
 import com.example.hotel.dto.TestDTO;
+import com.example.hotel.dto.servicedto.OrderServiceDTO;
+import com.example.hotel.dto.servicedto.OrderServiceResponse;
+import com.example.hotel.dto.servicedto.ServiceDTO;
 import com.example.hotel.mapper.RoomMapper;
 import com.example.hotel.model.BookedRoomModel;
 import com.example.hotel.model.BookingModel;
 import com.example.hotel.model.ClientModel;
 import com.example.hotel.model.RoomModel;
+import com.example.hotel.model.ServiceModel;
+import com.example.hotel.model.UsedServiceModel;
 import com.example.hotel.repository.BookedRoomRepository;
 import com.example.hotel.repository.BookingRepository;
 import com.example.hotel.repository.ClientRepository;
 import com.example.hotel.repository.RoomRepository;
+import com.example.hotel.repository.ServiceRepository;
+import com.example.hotel.repository.UsedServiceRepository;
 import com.example.hotel.repository.UserRepository;
 import com.example.hotel.service.HotelService;
 import com.example.hotel.utils.enumm.BookingStatus;
 import com.example.hotel.utils.enumm.RoomBookedStatus;
 import com.example.hotel.utils.enumm.RoomStatus;
+import com.example.hotel.utils.enumm.ServiceStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +34,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Book;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,6 +55,13 @@ public class HotelServiceImpl implements HotelService {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private ServiceRepository serviceRepository;
+
+    @Autowired
+    private UsedServiceRepository usedServiceRepository;
+
+    @Transactional
     @Override
     public CreateRoomDTO create(CreateRoomDTO dto) {
         RoomModel room = RoomMapper.INSTANCE.from(dto);
@@ -54,6 +71,7 @@ public class HotelServiceImpl implements HotelService {
         return dto;
     }
 
+    @Transactional
     @Override
     public RoomModel update(UUID id, CreateRoomDTO dto) {
         Optional<RoomModel> roomOpt = roomRepository.findById(id);
@@ -75,17 +93,18 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public TestDTO test(UUID id, TestDTO dto) {
-        BookedRoomModel bookedRoomModel = new BookedRoomModel();
-        bookedRoomModel.setCheckIn(dto.getCheckIn());
-        bookedRoomModel.setCheckOut(dto.getCheckOut());
-        bookedRoomModel.setPrice(dto.getPrice());
-        bookedRoomModel.setNote(dto.getNote());
-        bookedRoomModel.setRoomID(id);
+    public RoomModel blockRoom(UUID id) {
+        Optional<RoomModel> roomOpt = roomRepository.findById(id);
 
-        bookedRoomRepository.save(bookedRoomModel);
-
-        return dto;
+        if (roomOpt.isEmpty()) {
+            return null;
+        }
+        RoomModel room = roomOpt.get();
+        if (RoomStatus.FREE.equals(room.getStatus())) {
+            room.setStatus(RoomStatus.BLOCK);
+            return roomRepository.save(room);
+        }
+        return null;
     }
 
     @Transactional
@@ -166,6 +185,8 @@ public class HotelServiceImpl implements HotelService {
         if (!booking.getStatus().equals(BookingStatus.ACCEPT)) {
             return;
         }
+        booking.setStatus(BookingStatus.PROGRESS);
+        bookingRepository.save(booking);
 
         //update booked
         List<BookedRoomModel> bookedRoomModels = bookedRoomRepository.findByBookingId(bookingID);
@@ -218,6 +239,105 @@ public class HotelServiceImpl implements HotelService {
         return dtos;
     }
 
+    @Transactional
+    @Override
+    public ServiceModel createService(ServiceCreateDTO dto) {
+        ServiceModel model = new ServiceModel();
+        model.setName(dto.getName());
+        model.setPrice(dto.getPrice());
+        model.setStatus(ServiceStatus.ACTIVE);
+        if (dto.getDescription() != null) {
+            model.setDescription(dto.getDescription());
+        }
+        return serviceRepository.save(model);
+    }
+
+    @Transactional
+
+    @Override
+    public ServiceModel updateService(UUID serviceID, ServiceCreateDTO dto) {
+        Optional<ServiceModel> model = serviceRepository.findById(serviceID);
+        if (model.isPresent()) {
+            ServiceModel modelUpdate = model.get();
+            modelUpdate.setName(dto.getName());
+            modelUpdate.setPrice(dto.getPrice());
+            if (dto.getDescription() != null) {
+                modelUpdate.setDescription(dto.getDescription());
+            }
+            return serviceRepository.save(modelUpdate);
+        }
+        return null;
+    }
+
+    @Override
+    public ServiceModel inactiveService(UUID serviceID) {
+        Optional<ServiceModel> model = serviceRepository.findById(serviceID);
+        if (model.isPresent()) {
+            ServiceModel modelUpdate = model.get();
+            modelUpdate.setStatus(ServiceStatus.INACTIVE);
+            return serviceRepository.save(modelUpdate);
+        }
+        return null;
+    }
+
+    @Override
+    public List<ServiceModel> getAllService() {
+        return serviceRepository.getAllService();
+    }
+
+    @Transactional
+    @Override
+    public OrderServiceResponse orderService(UUID bookingID, List<OrderServiceDTO> dtos) {
+        Optional<BookingModel> bookingModel = bookingRepository.findById(bookingID);
+        if (bookingModel.isEmpty()) {
+            return null;
+        }
+
+        BookingModel booking = bookingModel.get();
+        if (!BookingStatus.PROGRESS.equals(booking.getStatus())) {
+            return null;
+        }
+
+        OrderServiceResponse response = new OrderServiceResponse();
+        List<UsedServiceModel> usedServiceModels = new ArrayList<>();
+
+        List<UUID> roomIds = dtos.stream().map(t -> t.getRoomID()).collect(Collectors.toList());
+        if (roomIds == null) {
+            return null;
+        }
+
+        for (OrderServiceDTO dto:
+             dtos) {
+            UsedServiceModel usedService = new UsedServiceModel();
+            List<ServiceDTO> serviceDTOS = dto.getServices();
+            if (serviceDTOS != null) {
+                Float price = 0f;
+                for (ServiceDTO serviceDTO: serviceDTOS
+                     ) {
+                    ServiceModel service = serviceRepository.getById(serviceDTO.getId());
+                    if (service != null) {
+                        usedService.setServiceID(serviceDTO.getId());
+                        usedService.setQuantity(serviceDTO.getQuantity());
+                        usedService.setSelloff(serviceDTO.getSelloff());
+                        price = price + serviceDTO.getQuantity() * service.getPrice() * (100 - serviceDTO.getSelloff()) / 100;
+                        usedService.setPrice(price);
+                    }
+                }
+                usedService.setPrice(price);
+            }
+            usedService.setBookingID(booking.getId());
+            usedService.setBookiedRoomID(dto.getRoomID());
+            usedServiceModels.add(usedService);
+        }
+
+        usedServiceRepository.saveAll(usedServiceModels);
+
+        response.setBookingID(booking.getId());
+        response.setServices(dtos);
+
+        return response;
+    }
+
     private String getIdUserCurrent() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -227,7 +347,7 @@ public class HotelServiceImpl implements HotelService {
 
         if (auth.getPrincipal() instanceof String) {
         return userRepository.findByUserName((String) auth.getPrincipal()).get().getId().toString();
-       }
+        }
 
         UserDetails currentAuditor = (UserDetails) auth.getPrincipal();
         String username =  currentAuditor.getUsername();

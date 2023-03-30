@@ -4,6 +4,7 @@ import com.example.hotel.common.util.ResponseHelper;
 import com.example.hotel.security.dto.LoginDTO;
 import com.example.hotel.security.dto.RegisterDTO;
 import com.example.hotel.security.serivce.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -18,6 +19,7 @@ public class AuthController {
     @Autowired
     private AuthService service;
 
+    @Operation(summary = "Login ")
     @PostMapping("login")
     public Object login(@RequestBody @Valid LoginDTO dto, BindingResult bindingResult) {
 
@@ -32,6 +34,7 @@ public class AuthController {
 
     }
 
+    @Operation(summary = "Register ")
     @PostMapping("register")
     public Object register(@RequestBody @Valid RegisterDTO dto, BindingResult bindingResult) {
 

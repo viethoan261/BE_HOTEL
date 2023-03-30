@@ -2,8 +2,12 @@ package com.example.hotel.service;
 
 import com.example.hotel.dto.BookingListDTO;
 import com.example.hotel.dto.CreateRoomDTO;
+import com.example.hotel.dto.ServiceCreateDTO;
 import com.example.hotel.dto.TestDTO;
+import com.example.hotel.dto.servicedto.OrderServiceDTO;
+import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.model.RoomModel;
+import com.example.hotel.model.ServiceModel;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +17,7 @@ public interface HotelService {
 
     RoomModel update(UUID id, CreateRoomDTO dto);
 
-    TestDTO test(UUID id, TestDTO dto);
+    RoomModel blockRoom(UUID id);
 
     void approve(UUID bookingID, Float selloff);
 
@@ -22,4 +26,16 @@ public interface HotelService {
     void checkin(UUID bookingID);
 
     List<BookingListDTO> getBooking();
+
+    ServiceModel createService(ServiceCreateDTO dto);
+
+    ServiceModel updateService(UUID serviceID, ServiceCreateDTO dto);
+
+    ServiceModel inactiveService(UUID serviceID);
+
+    List<ServiceModel> getAllService();
+
+    //service
+    OrderServiceResponse orderService(UUID bookingID, List<OrderServiceDTO> dtos);
+
 }

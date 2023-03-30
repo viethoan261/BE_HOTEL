@@ -4,6 +4,7 @@ import com.example.hotel.common.util.ResponseHelper;
 import com.example.hotel.dto.RequestBookRoomDTO;
 import com.example.hotel.dto.SearchRoomDTO;
 import com.example.hotel.service.ClientService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -18,19 +19,13 @@ public class ClientController {
     @Autowired
     private ClientService service;
 
-//    @PostMapping("{id}/test")
-//    public Object createTest(@PathVariable  String id, @Valid @RequestBody TestDTO dto) {
-//
-//        TestDTO dtoTest = roomService.test(UUID.fromString(id), dto);
-//
-//        return ResponseHelper.getResponse(dtoTest, HttpStatus.OK);
-//    }
-
+    @Operation(summary = "Get all room available ")
     @PostMapping("search")
     public Object search(@RequestBody SearchRoomDTO dto) {
         return ResponseHelper.getResponse(service.search(dto), HttpStatus.OK);
     }
 
+    @Operation(summary = "Order room")
     @PostMapping("order")
     public Object order(@Valid @RequestBody RequestBookRoomDTO dto, BindingResult result) {
 
