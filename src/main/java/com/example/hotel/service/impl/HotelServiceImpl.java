@@ -220,6 +220,7 @@ public class HotelServiceImpl implements HotelService {
                 RoomModel room = roomRepository.findById(model.getRoomID()).orElse(null);
                 if (room != null) {
                     InfoBookingDTO infoDTO = new InfoBookingDTO();
+                    infoDTO.setId(room.getId());
                     infoDTO.setName(room.getName());
                     infoDTO.setType(room.getType());
                     infoDTO.setImage(room.getImage());
