@@ -1,5 +1,6 @@
 package com.example.hotel.model;
 
+import com.example.hotel.common.model.BaseEntity;
 import com.example.hotel.utils.enumm.RoomBookedStatus;
 import com.example.hotel.utils.enumm.RoomStatus;
 import lombok.Getter;
@@ -18,12 +19,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @Table(name = "booked_room")
-public class BookedRoomModel {
-    @Id
-    @Type(type = "uuid-char")
-    @GeneratedValue
-    protected UUID id;
-
+public class BookedRoomModel extends BaseEntity {
     @Column(name = "room_id", nullable = false)
     @Type(type = "uuid-char")
     private UUID roomID;

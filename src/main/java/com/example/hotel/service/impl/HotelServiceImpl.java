@@ -151,7 +151,7 @@ public class HotelServiceImpl implements HotelService {
             return;
         }
         booking.setStatus(BookingStatus.CANCEL);
-        if (booking.getUserID().toString().isEmpty()) {
+        if (booking.getUserID() == null) {
             booking.setUserID(UUID.fromString(this.getIdUserCurrent()));
         }
         bookingRepository.save(booking);

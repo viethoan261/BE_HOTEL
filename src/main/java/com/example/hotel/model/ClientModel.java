@@ -1,5 +1,6 @@
 package com.example.hotel.model;
 
+import com.example.hotel.common.model.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,12 +20,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @Table(name = "client")
-public class ClientModel {
-    @Id
-    @Type(type = "uuid-char")
-    @GeneratedValue
-    protected UUID id;
-
+public class ClientModel extends BaseEntity {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
