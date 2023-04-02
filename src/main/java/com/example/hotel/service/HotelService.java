@@ -4,6 +4,7 @@ import com.example.hotel.dto.BookingListDTO;
 import com.example.hotel.dto.CreateRoomDTO;
 import com.example.hotel.dto.ServiceCreateDTO;
 import com.example.hotel.dto.TestDTO;
+import com.example.hotel.dto.bill.InfoBillDTO;
 import com.example.hotel.dto.servicedto.OrderServiceDTO;
 import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.model.RoomModel;
@@ -14,6 +15,8 @@ import java.util.UUID;
 
 public interface HotelService {
     CreateRoomDTO create(CreateRoomDTO dto);
+
+    List<RoomModel> getAllRoom();
 
     RoomModel update(UUID id, CreateRoomDTO dto);
 
@@ -38,4 +41,5 @@ public interface HotelService {
     //service
     OrderServiceResponse orderService(UUID bookingID, List<OrderServiceDTO> dtos);
 
+    InfoBillDTO payment(UUID bookingID);
 }

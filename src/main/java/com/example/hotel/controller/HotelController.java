@@ -3,6 +3,7 @@ package com.example.hotel.controller;
 import com.example.hotel.common.util.ResponseHelper;
 import com.example.hotel.dto.CreateRoomDTO;
 import com.example.hotel.dto.ServiceCreateDTO;
+import com.example.hotel.dto.bill.InfoBillDTO;
 import com.example.hotel.dto.servicedto.OrderServiceDTO;
 import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.model.RoomModel;
@@ -30,6 +31,14 @@ import java.util.UUID;
 public class HotelController {
     @Autowired
     private HotelService hotelService;
+
+    @Operation(summary = "Get all room")
+    @GetMapping("rooms")
+    public Object getAll() {
+        List<RoomModel> rooms = hotelService.getAllRoom();
+
+        return ResponseHelper.getResponse(rooms, HttpStatus.OK);
+    }
 
     @Operation(summary = "Create new room")
     @PostMapping("rooms")
@@ -159,6 +168,18 @@ public class HotelController {
 
         if (res == null) {
             return ResponseHelper.getErrorResponse("Fail to order", HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseHelper.getResponse(res, HttpStatus.OK);}
+
+    @Operation(summary = "Payment bill ")
+    @GetMapping("/bills/{booking-id}")
+    public Object getBill(@PathVariable(name = "booking-id") String bookingID) {
+
+        InfoBillDTO res = hotelService.payment(UUID.fromString(bookingID));
+
+        if (res == null) {
+            return ResponseHelper.getErrorResponse("Fail to payment bill", HttpStatus.BAD_REQUEST);
         }
 
         return ResponseHelper.getResponse(res, HttpStatus.OK);}

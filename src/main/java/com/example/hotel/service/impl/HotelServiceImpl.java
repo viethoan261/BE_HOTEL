@@ -4,24 +4,15 @@ import com.example.hotel.dto.BookingListDTO;
 import com.example.hotel.dto.CreateRoomDTO;
 import com.example.hotel.dto.InfoBookingDTO;
 import com.example.hotel.dto.ServiceCreateDTO;
-import com.example.hotel.dto.TestDTO;
+import com.example.hotel.dto.bill.InfoBillDTO;
+import com.example.hotel.dto.bill.RoomBillDTO;
+import com.example.hotel.dto.bill.ServiceBillDTO;
 import com.example.hotel.dto.servicedto.OrderServiceDTO;
 import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.dto.servicedto.ServiceDTO;
 import com.example.hotel.mapper.RoomMapper;
-import com.example.hotel.model.BookedRoomModel;
-import com.example.hotel.model.BookingModel;
-import com.example.hotel.model.ClientModel;
-import com.example.hotel.model.RoomModel;
-import com.example.hotel.model.ServiceModel;
-import com.example.hotel.model.UsedServiceModel;
-import com.example.hotel.repository.BookedRoomRepository;
-import com.example.hotel.repository.BookingRepository;
-import com.example.hotel.repository.ClientRepository;
-import com.example.hotel.repository.RoomRepository;
-import com.example.hotel.repository.ServiceRepository;
-import com.example.hotel.repository.UsedServiceRepository;
-import com.example.hotel.repository.UserRepository;
+import com.example.hotel.model.*;
+import com.example.hotel.repository.*;
 import com.example.hotel.service.HotelService;
 import com.example.hotel.utils.enumm.BookingStatus;
 import com.example.hotel.utils.enumm.RoomBookedStatus;
@@ -34,7 +25,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,6 +51,9 @@ public class HotelServiceImpl implements HotelService {
     @Autowired
     private UsedServiceRepository usedServiceRepository;
 
+    @Autowired
+    private BillRepository billRepository;
+
     @Transactional
     @Override
     public CreateRoomDTO create(CreateRoomDTO dto) {
@@ -69,6 +62,13 @@ public class HotelServiceImpl implements HotelService {
         room.setStatus(RoomStatus.FREE);
         roomRepository.save(room);
         return dto;
+    }
+
+    @Override
+    public List<RoomModel> getAllRoom() {
+        List<RoomModel> rooms = roomRepository.findAll()
+                .stream().filter(t -> !RoomStatus.BLOCK.equals(t.getStatus())).collect(Collectors.toList());
+        return rooms;
     }
 
     @Transactional
@@ -321,7 +321,7 @@ public class HotelServiceImpl implements HotelService {
                         usedService.setServiceID(serviceDTO.getId());
                         usedService.setQuantity(serviceDTO.getQuantity());
                         usedService.setSelloff(serviceDTO.getSelloff());
-                        price = serviceDTO.getQuantity() * service.getPrice() * (100 - serviceDTO.getSelloff()) / 100;
+                        price = serviceDTO.getQuantity() * service.getPrice();
                         usedService.setPrice(price);
                         usedService.setBookingID(booking.getId());
                         usedService.setBookiedRoomID(dto.getRoomID());
@@ -341,6 +341,93 @@ public class HotelServiceImpl implements HotelService {
         response.setServices(dtos);
 
         return response;
+    }
+
+    @Transactional
+    @Override
+    public InfoBillDTO payment(UUID bookingID) {
+        Float deposit;
+        Float totalRoom = 0f;
+        Float serviceCost = 0f;
+        Float amount;
+        BookingModel booking = bookingRepository.findById(bookingID).orElse(null);
+        if (booking == null) {
+            return null;
+        }
+
+        List<BookedRoomModel> bookedRoomModels = bookedRoomRepository.findByBookingId(bookingID);
+        InfoBillDTO bill = new InfoBillDTO();
+        ClientModel client = clientRepository.findById(booking.getClientID()).orElse(null);
+        UserModel user = userRepository.getById(booking.getUserID());
+        List<RoomBillDTO> roomBillDTOS = new ArrayList<>();
+        for (BookedRoomModel roomModel:
+                bookedRoomModels) {
+            totalRoom = totalRoom + roomModel.getPrice() * (1 - roomModel.getSelloff() / 100);
+
+            RoomBillDTO dto = new RoomBillDTO();
+            List<ServiceBillDTO> serviceBillDTOS = new ArrayList<>();
+            List<UsedServiceModel> usedServiceModels = usedServiceRepository.findByBookingIDAndRoomID(booking.getId(), roomModel.getRoomID());
+
+            for (UsedServiceModel model : usedServiceModels) {
+                ServiceBillDTO serviceBillDTO = new ServiceBillDTO();
+                ServiceModel serviceModel = serviceRepository.getById(model.getServiceID());
+                serviceCost = serviceCost + model.getPrice() * (1 - model.getSelloff() / 100);
+                if (model.getSelloff() != null) {
+                    serviceBillDTO.setSaleoff(model.getSelloff());
+                }
+                serviceBillDTO.setQuantity(model.getQuantity());
+                serviceBillDTO.setPrice(model.getPrice());
+                serviceBillDTO.setName(serviceModel.getName());
+                serviceBillDTOS.add(serviceBillDTO);
+            }
+            
+            RoomModel roomModel1 = roomRepository.getById(roomModel.getRoomID());
+            dto.setName(roomModel1.getName());
+            dto.setPrice(roomModel1.getPrice());
+            if (roomModel.getSelloff() != null) {
+                dto.setSaleoff(roomModel.getSelloff());
+            }
+            dto.setServices(serviceBillDTOS);
+
+            roomBillDTOS.add(dto);
+        }
+
+        deposit = totalRoom / 2;
+        amount = totalRoom - deposit + serviceCost;
+
+        bill.setClient(client);
+        bill.setEmployee(user.getUserName());
+        bill.setRooms(roomBillDTOS);
+        bill.setDeposit(deposit);
+        bill.setAmount(amount);
+
+        if (!BookingStatus.DONE.equals(booking.getStatus())) {
+            booking.setStatus(BookingStatus.DONE);
+            booking.setUserID(UUID.fromString(this.getIdUserCurrent()));
+            bookingRepository.save(booking);
+
+            for (BookedRoomModel model:
+                 bookedRoomModels) {
+                model.setStatus(RoomBookedStatus.DONE);
+            }
+            bookedRoomRepository.saveAll(bookedRoomModels);
+
+            List<UUID> roomIds = bookedRoomModels.stream().map(t -> t.getRoomID()).collect(Collectors.toList());
+            List<RoomModel> roomModels = roomRepository.findRoomByIds(roomIds);
+            for (RoomModel model:
+                    roomModels) {
+                model.setStatus(RoomStatus.FREE);
+                model.setIsBooked(Boolean.FALSE);
+            }
+            roomRepository.saveAll(roomModels);
+
+            BillModel billModel = new BillModel();
+            billModel.setAmount(amount);
+            billModel.setBookingID(bookingID);
+            billModel.setUserID(user.getId());
+            billRepository.save(billModel);
+        }
+        return bill;
     }
 
     private String getIdUserCurrent() {
