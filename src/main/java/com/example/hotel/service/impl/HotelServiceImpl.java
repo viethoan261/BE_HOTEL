@@ -309,7 +309,7 @@ public class HotelServiceImpl implements HotelService {
 
         for (OrderServiceDTO dto:
              dtos) {
-            UsedServiceModel usedService = new UsedServiceModel();
+
             List<ServiceDTO> serviceDTOS = dto.getServices();
             if (serviceDTOS != null) {
                 Float price = 0f;
@@ -317,18 +317,22 @@ public class HotelServiceImpl implements HotelService {
                      ) {
                     ServiceModel service = serviceRepository.getById(serviceDTO.getId());
                     if (service != null) {
+                        UsedServiceModel usedService = new UsedServiceModel();
                         usedService.setServiceID(serviceDTO.getId());
                         usedService.setQuantity(serviceDTO.getQuantity());
                         usedService.setSelloff(serviceDTO.getSelloff());
-                        price = price + serviceDTO.getQuantity() * service.getPrice() * (100 - serviceDTO.getSelloff()) / 100;
+                        price = serviceDTO.getQuantity() * service.getPrice() * (100 - serviceDTO.getSelloff()) / 100;
                         usedService.setPrice(price);
+                        usedService.setBookingID(booking.getId());
+                        usedService.setBookiedRoomID(dto.getRoomID());
+                        usedServiceModels.add(usedService);
                     }
                 }
-                usedService.setPrice(price);
+//                usedService.setPrice(price);
             }
-            usedService.setBookingID(booking.getId());
-            usedService.setBookiedRoomID(dto.getRoomID());
-            usedServiceModels.add(usedService);
+//            usedService.setBookingID(booking.getId());
+//            usedService.setBookiedRoomID(dto.getRoomID());
+//            usedServiceModels.add(usedService);
         }
 
         usedServiceRepository.saveAll(usedServiceModels);
