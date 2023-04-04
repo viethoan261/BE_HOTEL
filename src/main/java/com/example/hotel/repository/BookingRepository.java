@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface BookingRepository extends JpaRepository<BookingModel, UUID> {
-    @Query("Select b from BookingModel b where b.status <> 'CANCEL' AND b.status <> 'DONE' order by b.status desc")
+    @Query("Select b from BookingModel b order by b.status desc")
     List<BookingModel> getBookings();
 }

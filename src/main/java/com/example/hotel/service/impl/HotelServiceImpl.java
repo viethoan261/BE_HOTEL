@@ -66,8 +66,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public List<RoomModel> getAllRoom() {
-        List<RoomModel> rooms = roomRepository.findAll()
-                .stream().filter(t -> !RoomStatus.BLOCK.equals(t.getStatus())).collect(Collectors.toList());
+        List<RoomModel> rooms = roomRepository.findAll();
         return rooms;
     }
 

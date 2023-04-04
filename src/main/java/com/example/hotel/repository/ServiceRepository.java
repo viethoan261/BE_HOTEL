@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<ServiceModel, UUID> {
-    @Query("select s from ServiceModel s where s.status = 'ACTIVE'")
+    @Query("select s from ServiceModel s order by s.status desc")
     List<ServiceModel> getAllService();
 }
