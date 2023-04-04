@@ -105,6 +105,21 @@ public class HotelServiceImpl implements HotelService {
         return null;
     }
 
+    @Override
+    public RoomModel unlockRoom(UUID id) {
+        Optional<RoomModel> roomOpt = roomRepository.findById(id);
+
+        if (roomOpt.isEmpty()) {
+            return null;
+        }
+        RoomModel room = roomOpt.get();
+        if (RoomStatus.BLOCK.equals(room.getStatus())) {
+            room.setStatus(RoomStatus.FREE);
+            return roomRepository.save(room);
+        }
+        return null;
+    }
+
     @Transactional
     @Override
     public void approve(UUID bookingID, Float saleoff) {

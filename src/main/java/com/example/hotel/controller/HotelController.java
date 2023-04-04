@@ -83,6 +83,18 @@ public class HotelController {
         return ResponseHelper.getResponse(updateRoom, HttpStatus.OK);
     }
 
+    @Operation(summary = "Unblock room ")
+    @PostMapping("rooms/{id}/unlock")
+    public Object unblockRoom(@PathVariable String id) {
+        RoomModel updateRoom = hotelService.unlockRoom(UUID.fromString(id));
+
+        if (updateRoom == null) {
+            return ResponseHelper.getErrorResponse("Room is not existed or not be BLOCK", HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseHelper.getResponse(updateRoom, HttpStatus.OK);
+    }
+
     @Operation(summary = "Approve order request ")
     @GetMapping("/rooms/{booking-id}/approve")
     public Object approve(@PathVariable(name = "booking-id") String id, Float saleoff) {

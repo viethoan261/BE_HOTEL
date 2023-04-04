@@ -21,6 +21,8 @@ public interface HotelService {
 
     RoomModel blockRoom(UUID id);
 
+    RoomModel unlockRoom(UUID id);
+
     void approve(UUID bookingID, Float saleoff);
 
     void cancel(UUID bookingID);
