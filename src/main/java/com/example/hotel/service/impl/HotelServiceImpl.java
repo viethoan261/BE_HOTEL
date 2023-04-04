@@ -1,15 +1,14 @@
 package com.example.hotel.service.impl;
 
-import com.example.hotel.dto.BookingListDTO;
-import com.example.hotel.dto.CreateRoomDTO;
-import com.example.hotel.dto.InfoBookingDTO;
-import com.example.hotel.dto.ServiceCreateDTO;
+import com.example.hotel.dto.*;
 import com.example.hotel.dto.bill.InfoBillDTO;
 import com.example.hotel.dto.bill.RoomBillDTO;
 import com.example.hotel.dto.bill.ServiceBillDTO;
 import com.example.hotel.dto.servicedto.OrderServiceDTO;
 import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.dto.servicedto.ServiceDTO;
+import com.example.hotel.dto.stat.StatDTO;
+import com.example.hotel.dto.stat.StatDTO2;
 import com.example.hotel.mapper.RoomMapper;
 import com.example.hotel.model.*;
 import com.example.hotel.repository.*;
@@ -72,7 +71,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Transactional
     @Override
-    public RoomModel update(UUID id, CreateRoomDTO dto) {
+    public RoomModel update(UUID id, UpdateRoomDTO dto) {
         Optional<RoomModel> roomOpt = roomRepository.findById(id);
 
         if (roomOpt.isEmpty()) {
@@ -427,6 +426,21 @@ public class HotelServiceImpl implements HotelService {
             billRepository.save(billModel);
         }
         return bill;
+    }
+
+    @Override
+    public List<StatDTO> statService() {
+        return serviceRepository.getStat();
+    }
+
+    @Override
+    public List<StatDTO> statRoom() {
+        return bookedRoomRepository.getRoomStat();
+    }
+
+    @Override
+    public List<StatDTO2> statBill() {
+        return billRepository.getBillStat();
     }
 
     private String getIdUserCurrent() {

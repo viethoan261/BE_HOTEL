@@ -3,6 +3,7 @@ package com.example.hotel.controller;
 import com.example.hotel.common.util.ResponseHelper;
 import com.example.hotel.dto.CreateRoomDTO;
 import com.example.hotel.dto.ServiceCreateDTO;
+import com.example.hotel.dto.UpdateRoomDTO;
 import com.example.hotel.dto.bill.InfoBillDTO;
 import com.example.hotel.dto.servicedto.OrderServiceDTO;
 import com.example.hotel.dto.servicedto.OrderServiceResponse;
@@ -55,7 +56,7 @@ public class HotelController {
 
     @Operation(summary = "Update room ")
     @PostMapping("rooms/{id}")
-    public Object updateRoom(@PathVariable String id, @Valid @RequestBody CreateRoomDTO dto,
+    public Object updateRoom(@PathVariable String id, @Valid @RequestBody UpdateRoomDTO dto,
                          BindingResult result) {
         if(result.hasErrors()) {
             return ResponseHelper.getErrorResponse(result, HttpStatus.BAD_REQUEST);
@@ -183,4 +184,19 @@ public class HotelController {
         }
 
         return ResponseHelper.getResponse(res, HttpStatus.OK);}
+
+    @Operation(summary = "Service stat ")
+    @GetMapping("/stats/services")
+    public Object getServiceStat() {
+        return ResponseHelper.getResponse(hotelService.statService(), HttpStatus.OK);}
+
+    @Operation(summary = "Rooms stat ")
+    @GetMapping("/stats/rooms")
+    public Object getRoomStat() {
+        return ResponseHelper.getResponse(hotelService.statRoom(), HttpStatus.OK);}
+
+    @Operation(summary = "Bills stat ")
+    @GetMapping("/stats/bills")
+    public Object getBillStat() {
+        return ResponseHelper.getResponse(hotelService.statBill(), HttpStatus.OK);}
 }
