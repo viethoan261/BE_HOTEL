@@ -20,6 +20,6 @@ public interface BookedRoomRepository extends JpaRepository<BookedRoomModel, UUI
     @Query("select br from BookedRoomModel br where br.bookingId = :bookingId")
     List<BookedRoomModel> findByBookingId(UUID bookingId);
 
-    @Query("select new com.example.hotel.dto.stat.StatDTO3(r.type, count(rb.roomID)) from BookedRoomModel rb JOIN RoomModel r on r.id = rb.roomID group by rb.roomID")
+    @Query("select new com.example.hotel.dto.stat.StatDTO3(r.type, count(rb.roomID)) from BookedRoomModel rb JOIN RoomModel r on r.id = rb.roomID group by r.type")
     List<StatDTO3> getRoomStat();
 }
