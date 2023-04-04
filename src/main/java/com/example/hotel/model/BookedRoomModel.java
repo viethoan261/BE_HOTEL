@@ -36,8 +36,8 @@ public class BookedRoomModel extends BaseEntity {
     @Column(name = "note")
     private String note;
 
-    @Column(name = "selloff", nullable = false)
-    private Float selloff;
+    @Column(name = "saleoff", nullable = false)
+    private Float saleoff;
 
     @Column(name = "is_check_in")
     private Boolean isCheckIn;

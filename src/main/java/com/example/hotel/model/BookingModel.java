@@ -22,8 +22,8 @@ public class BookingModel extends BaseEntity {
     @Column(name = "booking_date")
     private LocalDateTime bookingDate;
 
-    @Column(name = "selloff")
-    private Float selloff;
+    @Column(name = "saleoff")
+    private Float saleoff;
 
     @Column(name = "note")
     private String note;

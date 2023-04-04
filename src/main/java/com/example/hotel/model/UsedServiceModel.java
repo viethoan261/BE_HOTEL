@@ -37,6 +37,6 @@ public class UsedServiceModel extends BaseEntity {
     @Type(type = "uuid-char")
     private UUID serviceID;
 
-    @Column(name = "selloff")
-    private Float selloff;
+    @Column(name = "saleoff")
+    private Float saleoff;
 }

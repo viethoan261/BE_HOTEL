@@ -16,6 +16,6 @@ public class ServiceDTO {
     @Min(value = 1, message = "Min quantity must be 1")
     private Integer quantity;
 
-    @Min(value = 0, message = "Selloff Min must be 1")
-    private Float selloff;
+    @Min(value = 0, message = "Saleoff Min must be 1")
+    private Float saleoff;
 }

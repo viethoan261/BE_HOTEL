@@ -22,7 +22,7 @@ public interface HotelService {
 
     RoomModel blockRoom(UUID id);
 
-    void approve(UUID bookingID, Float selloff);
+    void approve(UUID bookingID, Float saleoff);
 
     void cancel(UUID bookingID);
 

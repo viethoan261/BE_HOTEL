@@ -109,7 +109,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Transactional
     @Override
-    public void approve(UUID bookingID, Float selloff) {
+    public void approve(UUID bookingID, Float saleoff) {
         Optional<BookingModel> bookingModel = bookingRepository.findById(bookingID);
         if (bookingModel.isEmpty()) {
             return;
@@ -121,14 +121,14 @@ public class HotelServiceImpl implements HotelService {
         }
         booking.setStatus(BookingStatus.ACCEPT);
         booking.setUserID(UUID.fromString(this.getIdUserCurrent()));
-        booking.setSelloff(selloff);
+        booking.setSaleoff(saleoff);
         bookingRepository.save(booking);
 
         //update booked room
         List<BookedRoomModel> bookedRoomModels = bookedRoomRepository.findByBookingId(bookingID);
         for (BookedRoomModel bookedRoom: bookedRoomModels
              ) {
-            bookedRoom.setSelloff(selloff);
+            bookedRoom.setSaleoff(saleoff);
         }
         bookedRoomRepository.saveAll(bookedRoomModels);
 
@@ -320,7 +320,7 @@ public class HotelServiceImpl implements HotelService {
                         UsedServiceModel usedService = new UsedServiceModel();
                         usedService.setServiceID(serviceDTO.getId());
                         usedService.setQuantity(serviceDTO.getQuantity());
-                        usedService.setSelloff(serviceDTO.getSelloff());
+                        usedService.setSaleoff(serviceDTO.getSaleoff());
                         price = serviceDTO.getQuantity() * service.getPrice();
                         usedService.setPrice(price);
                         usedService.setBookingID(booking.getId());
@@ -362,7 +362,7 @@ public class HotelServiceImpl implements HotelService {
         List<RoomBillDTO> roomBillDTOS = new ArrayList<>();
         for (BookedRoomModel roomModel:
                 bookedRoomModels) {
-            totalRoom = totalRoom + roomModel.getPrice() * (1 - roomModel.getSelloff() / 100);
+            totalRoom = totalRoom + roomModel.getPrice() * (1 - roomModel.getSaleoff() / 100);
 
             RoomBillDTO dto = new RoomBillDTO();
             List<ServiceBillDTO> serviceBillDTOS = new ArrayList<>();
@@ -371,9 +371,9 @@ public class HotelServiceImpl implements HotelService {
             for (UsedServiceModel model : usedServiceModels) {
                 ServiceBillDTO serviceBillDTO = new ServiceBillDTO();
                 ServiceModel serviceModel = serviceRepository.getById(model.getServiceID());
-                serviceCost = serviceCost + model.getPrice() * (1 - model.getSelloff() / 100);
-                if (model.getSelloff() != null) {
-                    serviceBillDTO.setSaleoff(model.getSelloff());
+                serviceCost = serviceCost + model.getPrice() * (1 - model.getSaleoff() / 100);
+                if (model.getSaleoff() != null) {
+                    serviceBillDTO.setSaleoff(model.getSaleoff());
                 }
                 serviceBillDTO.setQuantity(model.getQuantity());
                 serviceBillDTO.setPrice(model.getPrice());
@@ -384,8 +384,8 @@ public class HotelServiceImpl implements HotelService {
             RoomModel roomModel1 = roomRepository.getById(roomModel.getRoomID());
             dto.setName(roomModel1.getName());
             dto.setPrice(roomModel1.getPrice());
-            if (roomModel.getSelloff() != null) {
-                dto.setSaleoff(roomModel.getSelloff());
+            if (roomModel.getSaleoff() != null) {
+                dto.setSaleoff(roomModel.getSaleoff());
             }
             dto.setServices(serviceBillDTOS);
 

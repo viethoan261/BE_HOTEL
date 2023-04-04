@@ -84,8 +84,8 @@ public class HotelController {
 
     @Operation(summary = "Approve order request ")
     @GetMapping("/rooms/{booking-id}/approve")
-    public Object approve(@PathVariable(name = "booking-id") String id, Float selloff) {
-        hotelService.approve(UUID.fromString(id), selloff);
+    public Object approve(@PathVariable(name = "booking-id") String id, Float saleoff) {
+        hotelService.approve(UUID.fromString(id), saleoff);
         return ResponseHelper.getResponse("Dat phong thanh cong", HttpStatus.OK);
     }
 
