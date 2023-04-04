@@ -12,6 +12,6 @@ import java.util.UUID;
 
 @Repository
 public interface BillRepository extends JpaRepository<BillModel, UUID> {
-    @Query("select new com.example.hotel.dto.stat.StatDTO2(( MONTH(b.createdAt)), sum(b.amount)) from BillModel b  group by MONTH(b.createdAt)")
+    @Query("select new com.example.hotel.dto.stat.StatDTO2(( MONTH(b.paymentDate)), sum(b.amount)) from BillModel b  group by MONTH(b.paymentDate)")
     List<StatDTO2> getBillStat();
 }
