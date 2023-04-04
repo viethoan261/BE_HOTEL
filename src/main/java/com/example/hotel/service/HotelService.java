@@ -6,6 +6,7 @@ import com.example.hotel.dto.servicedto.OrderServiceDTO;
 import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.dto.stat.StatDTO;
 import com.example.hotel.dto.stat.StatDTO2;
+import com.example.hotel.dto.stat.StatDTO3;
 import com.example.hotel.model.RoomModel;
 import com.example.hotel.model.ServiceModel;
 
@@ -47,7 +48,7 @@ public interface HotelService {
     //stat
     List<StatDTO> statService();
 
-    List<StatDTO> statRoom();
+    List<StatDTO3> statRoom();
 
     List<StatDTO2> statBill();
 }

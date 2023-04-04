@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Setter
@@ -29,4 +30,7 @@ public class BillModel extends BaseEntity {
     @Column(name = "booking_id")
     @Type(type = "uuid-char")
     private UUID bookingID;
+
+    @Column(name = "payment_date")
+    private LocalDateTime paymentDate;
 }

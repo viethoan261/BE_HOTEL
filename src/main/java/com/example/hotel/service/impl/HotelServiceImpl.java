@@ -9,6 +9,7 @@ import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.dto.servicedto.ServiceDTO;
 import com.example.hotel.dto.stat.StatDTO;
 import com.example.hotel.dto.stat.StatDTO2;
+import com.example.hotel.dto.stat.StatDTO3;
 import com.example.hotel.mapper.RoomMapper;
 import com.example.hotel.model.*;
 import com.example.hotel.repository.*;
@@ -24,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -363,6 +365,7 @@ public class HotelServiceImpl implements HotelService {
         Float totalRoom = 0f;
         Float serviceCost = 0f;
         Float amount;
+        LocalDateTime paymentDate = null;
         BookingModel booking = bookingRepository.findById(bookingID).orElse(null);
         if (booking == null) {
             return null;
@@ -376,7 +379,7 @@ public class HotelServiceImpl implements HotelService {
         for (BookedRoomModel roomModel:
                 bookedRoomModels) {
             totalRoom = totalRoom + roomModel.getPrice() * (1 - roomModel.getSaleoff() / 100);
-
+            paymentDate = roomModel.getCheckOut();
             RoomBillDTO dto = new RoomBillDTO();
             List<ServiceBillDTO> serviceBillDTOS = new ArrayList<>();
             List<UsedServiceModel> usedServiceModels = usedServiceRepository.findByBookingIDAndRoomID(booking.getId(), roomModel.getRoomID());
@@ -438,6 +441,7 @@ public class HotelServiceImpl implements HotelService {
             billModel.setAmount(amount);
             billModel.setBookingID(bookingID);
             billModel.setUserID(user.getId());
+            billModel.setPaymentDate(paymentDate);
             billRepository.save(billModel);
         }
         return bill;
@@ -449,7 +453,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public List<StatDTO> statRoom() {
+    public List<StatDTO3> statRoom() {
         return bookedRoomRepository.getRoomStat();
     }
 

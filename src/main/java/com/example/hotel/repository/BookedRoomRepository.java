@@ -1,6 +1,7 @@
 package com.example.hotel.repository;
 
 import com.example.hotel.dto.stat.StatDTO;
+import com.example.hotel.dto.stat.StatDTO3;
 import com.example.hotel.model.BookedRoomModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,6 @@ public interface BookedRoomRepository extends JpaRepository<BookedRoomModel, UUI
     @Query("select br from BookedRoomModel br where br.bookingId = :bookingId")
     List<BookedRoomModel> findByBookingId(UUID bookingId);
 
-    @Query("select new com.example.hotel.dto.stat.StatDTO(r.name, count(rb.roomID)) from BookedRoomModel rb JOIN RoomModel r on r.id = rb.roomID group by rb.roomID")
-    List<StatDTO> getRoomStat();
+    @Query("select new com.example.hotel.dto.stat.StatDTO3(r.type, count(rb.roomID)) from BookedRoomModel rb JOIN RoomModel r on r.id = rb.roomID group by rb.roomID")
+    List<StatDTO3> getRoomStat();
 }
