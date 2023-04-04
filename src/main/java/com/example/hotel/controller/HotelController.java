@@ -55,7 +55,7 @@ public class HotelController {
 
     @Operation(summary = "Update room ")
     @PostMapping("rooms/{id}")
-    public Object updateRoom(String id, @Valid @RequestBody CreateRoomDTO dto,
+    public Object updateRoom(@PathVariable String id, @Valid @RequestBody CreateRoomDTO dto,
                          BindingResult result) {
         if(result.hasErrors()) {
             return ResponseHelper.getErrorResponse(result, HttpStatus.BAD_REQUEST);
@@ -72,7 +72,7 @@ public class HotelController {
 
     @Operation(summary = "Block room ")
     @PostMapping("rooms/{id}/block")
-    public Object blockRoom(String id) {
+    public Object blockRoom(@PathVariable String id) {
         RoomModel updateRoom = hotelService.blockRoom(UUID.fromString(id));
 
         if (updateRoom == null) {
