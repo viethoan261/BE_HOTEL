@@ -38,6 +38,8 @@ public interface HotelService {
 
     ServiceModel inactiveService(UUID serviceID);
 
+    ServiceModel activeService(UUID serviceID);
+
     List<ServiceModel> getAllService();
 
     //service

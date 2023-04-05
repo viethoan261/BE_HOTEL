@@ -297,6 +297,20 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
+    public ServiceModel activeService(UUID serviceID) {
+        Optional<ServiceModel> model = serviceRepository.findById(serviceID);
+        if (model.isPresent()) {
+            ServiceModel modelUpdate = model.get();
+            if (modelUpdate.getStatus().equals(ServiceStatus.INACTIVE)) {
+                modelUpdate.setStatus(ServiceStatus.ACTIVE);
+                return serviceRepository.save(modelUpdate);
+            }
+            
+        }
+        return null;
+    }
+
+    @Override
     public List<ServiceModel> getAllService() {
         return serviceRepository.getAllService();
     }

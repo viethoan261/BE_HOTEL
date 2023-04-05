@@ -169,6 +169,17 @@ public class HotelController {
 
         return ResponseHelper.getResponse(updateService, HttpStatus.OK);}
 
+    @Operation(summary = "Active service ")
+    @PostMapping("/services/{service-id}/active")
+    public Object activeService(@PathVariable(name = "service-id") String serviceID) {
+        ServiceModel updateService = hotelService.activeService(UUID.fromString(serviceID));
+
+        if (updateService == null) {
+            return ResponseHelper.getErrorResponse("Service is not existed", HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseHelper.getResponse(updateService, HttpStatus.OK);}
+
     @Operation(summary = "Order service ")
     @PostMapping("/services/{booking-id}/order")
     public Object orderService(@PathVariable(name = "booking-id") String bookingID, @Valid @RequestBody List<OrderServiceDTO> dtos,
