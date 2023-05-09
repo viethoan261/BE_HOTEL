@@ -36,7 +36,7 @@ public class RequestBookRoomDTO {
     private String bankNumber;
 
     @NotNull(message = "Ids room can not be null")
-    private List<String> idsRoom;
+    private List<RoomBookDTO> rooms;
 
     @NotNull(message = "Time checkin can not be null")
     private LocalDateTime checkIn;

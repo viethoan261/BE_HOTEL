@@ -4,23 +4,19 @@ import com.example.hotel.common.util.ResponseHelper;
 import com.example.hotel.dto.CreateRoomDTO;
 import com.example.hotel.dto.ServiceCreateDTO;
 import com.example.hotel.dto.UpdateRoomDTO;
+import com.example.hotel.dto.UserUpdateDTO;
 import com.example.hotel.dto.bill.InfoBillDTO;
 import com.example.hotel.dto.servicedto.OrderServiceDTO;
 import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.model.RoomModel;
 import com.example.hotel.model.ServiceModel;
+import com.example.hotel.model.UserModel;
 import com.example.hotel.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -232,4 +228,18 @@ public class HotelController {
     @GetMapping("/clients")
     public Object getAllClient() {
         return ResponseHelper.getResponse(hotelService.getAllClient(), HttpStatus.OK);}
+
+    @Operation(summary = "active/inactive user")
+    @GetMapping("/users/toggle")
+    public Object toggleUser(String userId) {
+        return ResponseHelper.getResponse(hotelService.actionUser(UUID.fromString(userId)), HttpStatus.OK);}
+
+    @Operation(summary = "update user")
+    @PutMapping("/users/{id}")
+    public Object updateUser(@PathVariable String userId, @RequestBody UserUpdateDTO dto) {
+        UserModel user = hotelService.updateUser(UUID.fromString(userId), dto);
+        if (user == null) {
+            return ResponseHelper.getErrorResponse("Fail to update user", HttpStatus.BAD_REQUEST);
+        }
+        return ResponseHelper.getResponse(user, HttpStatus.OK);}
 }

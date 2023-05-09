@@ -486,6 +486,37 @@ public class HotelServiceImpl implements HotelService {
         return clientRepository.findAll();
     }
 
+    @Override
+    public boolean actionUser(UUID userID) {
+        Optional<UserModel> userOtp = userRepository.findById(userID);
+        if (userOtp.isEmpty()) {
+            return false;
+        }
+        UserModel user = userOtp.get();
+        if (user.getIsActive() == true) {
+            user.setIsActive(false);
+        } else {
+            user.setIsActive(true);
+        }
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public UserModel updateUser(UUID userId, UserUpdateDTO dto) {
+        Optional<UserModel> userOtp = userRepository.findById(userId);
+        if (userOtp.isEmpty()) {
+            return null;
+        }
+        UserModel user = userOtp.get();
+        if (dto.getFullName() == null) {
+            return null;
+        }
+        user.setFullName(dto.getFullName());
+        userRepository.save(user);
+        return user;
+    }
+
     private String getIdUserCurrent() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 

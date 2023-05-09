@@ -57,7 +57,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public RequestBookRoomDTO orderRoom(RequestBookRoomDTO dto) {
-        List<UUID> ids = dto.getIdsRoom().stream().map(t -> UUID.fromString(t)).collect(Collectors.toList());
+        List<UUID> ids = dto.getRooms().stream().map(t -> UUID.fromString(t.getId())).collect(Collectors.toList());
         if (this.checkAvailableRoom(ids, dto)) {
             List<RoomModel> rooms = repository.findRoomByIds(ids);
             ClientModel clientModel = new ClientModel();
@@ -95,7 +95,7 @@ public class ClientServiceImpl implements ClientService {
                 BookedRoomModel bookedRoom = new BookedRoomModel();
                 bookedRoom.setRoomID(room.getId());
                 bookedRoom.setNote(dto.getNote());
-                bookedRoom.setPrice(room.getPrice());
+                bookedRoom.setPrice(dto.getRooms().get(i).getPrice());
                 bookedRoom.setIsCheckIn(Boolean.FALSE);
                 bookedRoom.setCheckIn(dto.getCheckIn());
                 bookedRoom.setCheckOut(dto.getCheckOut());

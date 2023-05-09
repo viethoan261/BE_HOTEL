@@ -59,4 +59,8 @@ public interface HotelService {
     List<UserModel> getAllUser();
 
     List<ClientModel> getAllClient();
+
+    boolean actionUser(UUID userID);
+
+    UserModel updateUser(UUID userId, UserUpdateDTO dto);
 }
