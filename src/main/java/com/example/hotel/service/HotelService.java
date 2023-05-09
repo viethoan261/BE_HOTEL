@@ -7,8 +7,10 @@ import com.example.hotel.dto.servicedto.OrderServiceResponse;
 import com.example.hotel.dto.stat.StatDTO;
 import com.example.hotel.dto.stat.StatDTO2;
 import com.example.hotel.dto.stat.StatDTO3;
+import com.example.hotel.model.ClientModel;
 import com.example.hotel.model.RoomModel;
 import com.example.hotel.model.ServiceModel;
+import com.example.hotel.model.UserModel;
 
 import java.util.List;
 import java.util.UUID;
@@ -53,4 +55,8 @@ public interface HotelService {
     List<StatDTO3> statRoom();
 
     List<StatDTO2> statBill();
+
+    List<UserModel> getAllUser();
+
+    List<ClientModel> getAllClient();
 }

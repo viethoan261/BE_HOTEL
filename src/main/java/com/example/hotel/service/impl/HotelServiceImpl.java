@@ -476,6 +476,16 @@ public class HotelServiceImpl implements HotelService {
         return billRepository.getBillStat();
     }
 
+    @Override
+    public List<UserModel> getAllUser() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<ClientModel> getAllClient() {
+        return clientRepository.findAll();
+    }
+
     private String getIdUserCurrent() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 

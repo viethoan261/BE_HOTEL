@@ -222,4 +222,14 @@ public class HotelController {
     @GetMapping("/stats/bills")
     public Object getBillStat() {
         return ResponseHelper.getResponse(hotelService.statBill(), HttpStatus.OK);}
+
+    @Operation(summary = "Get all user ")
+    @GetMapping("/users")
+    public Object getAllUser() {
+        return ResponseHelper.getResponse(hotelService.getAllUser(), HttpStatus.OK);}
+
+    @Operation(summary = "Get all client ")
+    @GetMapping("/clients")
+    public Object getAllClient() {
+        return ResponseHelper.getResponse(hotelService.getAllClient(), HttpStatus.OK);}
 }
