@@ -236,8 +236,8 @@ public class HotelController {
 
     @Operation(summary = "update user")
     @PutMapping("/users/{id}")
-    public Object updateUser(@PathVariable String userId, @RequestBody UserUpdateDTO dto) {
-        UserModel user = hotelService.updateUser(UUID.fromString(userId), dto);
+    public Object updateUser(@PathVariable String id, @RequestBody UserUpdateDTO dto) {
+        UserModel user = hotelService.updateUser(UUID.fromString(id), dto);
         if (user == null) {
             return ResponseHelper.getErrorResponse("Fail to update user", HttpStatus.BAD_REQUEST);
         }
