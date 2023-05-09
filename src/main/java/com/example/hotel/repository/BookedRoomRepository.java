@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface BookedRoomRepository extends JpaRepository<BookedRoomModel, UUID> {
 
-    @Query("select br from BookedRoomModel br where (br.checkIn > :end or br.checkOut < :start) and br.status <> 'DONE' ")
+    @Query("select br from BookedRoomModel br where (br.checkIn > :end or br.checkOut < :start) and br.status <> 'DONE' and br.status <> 'CANCEL'")
     List<BookedRoomModel> bookedRoomExpire(LocalDateTime start, LocalDateTime end);
 
     @Query("select br from BookedRoomModel br where br.bookingId = :bookingId")
