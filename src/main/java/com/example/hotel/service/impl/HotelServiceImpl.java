@@ -413,7 +413,7 @@ public class HotelServiceImpl implements HotelService {
             
             RoomModel roomModel1 = roomRepository.getById(roomModel.getRoomID());
             dto.setName(roomModel1.getName());
-            dto.setPrice(roomModel1.getPrice());
+            dto.setPrice(roomModel.getPrice());
             if (roomModel.getSaleoff() != null) {
                 dto.setSaleoff(roomModel.getSaleoff());
             }
