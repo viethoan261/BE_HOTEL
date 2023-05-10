@@ -30,6 +30,9 @@ public class AuthServiceImpl implements AuthService {
         Optional<UserModel> userOpt = repository.findByUserName(dto.getUsername());
 
         String encodedPassword = userOpt.get().getPassword();
+        if (userOpt.get().getIsActive() == false) {
+            return null;
+        }
         if (passwordEncoder.matches(dto.getPassword(), encodedPassword)) {
             return jwts.generateJwtToken(dto.getUsername());
         }
@@ -44,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
         user.setUserName(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setPosition(RoleUser.ROLE_EMPLOYEE);
+        user.setIsActive(true);
 
         return repository.save(user);
     }
