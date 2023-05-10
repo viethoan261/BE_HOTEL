@@ -67,7 +67,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public List<RoomModel> getAllRoom() {
-        List<RoomModel> rooms = roomRepository.findAll();
+        List<RoomModel> rooms = roomRepository.findAllRoom();
         return rooms;
     }
 

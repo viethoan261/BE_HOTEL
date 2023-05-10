@@ -16,4 +16,7 @@ public interface RoomRepository extends JpaRepository<RoomModel, UUID> {
 
     @Query("select r FROM RoomModel r where r.id IN :ids and r.status <> 'BLOCK'")
     List<RoomModel> findRoomByIds(List<UUID> ids);
+
+    @Query("select r FROM RoomModel r order by r.status")
+    List<RoomModel> findAllRoom();
 }
