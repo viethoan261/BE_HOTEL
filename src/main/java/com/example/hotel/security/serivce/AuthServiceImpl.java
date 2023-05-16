@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setPosition(RoleUser.ROLE_EMPLOYEE);
         user.setIsActive(true);
-        user.setFullname(dtl.getFullname());
+        user.setFullName(dto.getFullname());
 
         return repository.save(user);
     }
