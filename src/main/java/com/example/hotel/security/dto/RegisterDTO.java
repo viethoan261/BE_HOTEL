@@ -13,5 +13,7 @@ public class RegisterDTO {
 
     @NotBlank(message = "Password can not be blank")
     private String password;
+    
+    private String fullname;
 }
 
